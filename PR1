@@ -1,0 +1,58 @@
+class Hero:
+    def __init__(self, name, health=100, attack_power=25, defense=10):
+        self.name = name
+        self.__health = health          # private
+        self.__max_health = health      # private
+        self.attack_power = attack_power
+        self.defense = defense
+
+    # public метод
+    def attack(self, target):
+        if not isinstance(target, Hero):
+            print("Можна атакувати тільки іншого героя!")
+            return
+        damage = self.__calculate_damage(target)
+        target.take_damage(damage)
+        print(f"{self.name} атакує {target.name} і завдає {damage} урону!")
+
+    # public метод
+    def take_damage(self, amount):
+        actual_damage = max(amount - self.defense, 0)
+        self.__health -= actual_damage
+        if self.__health < 0:
+            self.__health = 0
+        print(f"{self.name} отримав {actual_damage} урону! HP: {self.__health}/{self.__max_health}")
+
+    # public метод
+    def is_alive(self):
+        alive = self.__health > 0
+        print(f"{self.name} живий? {'Так' if alive else 'Ні'}")
+        return alive
+
+    # public метод
+    def get_stats(self):
+        print(f"\n=== {self.name} ===")
+        print(f"HP: {self.__health}/{self.__max_health}")
+        print(f"Атака: {self.attack_power}")
+        print(f"Захист: {self.defense}\n")
+
+    # private метод
+    def __calculate_damage(self, target):
+        # тут можна додати більш складну логіку для обчислення шкоди
+        return self.attack_power
+
+# Приклад використання:
+hero1 = Hero("Геральт", health=100, attack_power=25, defense=10)
+hero2 = Hero("Монстр", health=80, attack_power=20, defense=5)
+
+hero1.get_stats()
+hero2.get_stats()
+
+hero1.attack(hero2)
+hero2.attack(hero1)
+
+hero1.is_alive()
+hero2.is_alive()
+
+hero1.get_stats()
+hero2.get_stats()
